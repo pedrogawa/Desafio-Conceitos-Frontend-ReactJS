@@ -5,11 +5,11 @@ import api from './services/api.js';
 import "./styles.css";
 
 function App() {
-  const [repositories, setRepository] = useState([]);
+  const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
     api.get('/repositories').then(response => {
-      setRepository(response.data)
+      setRepositories(response.data)
     })
   }, [])
 
@@ -21,23 +21,14 @@ function App() {
 
     const repository = response.data;
 
-    setRepository([...repositories, repository])
+    setRepositories([...repositories, repository])
   }
 
   async function handleRemoveRepository(id) {
     // TODO
+    await api.delete(`/repositories/${id}`)
 
-    const response = await api.delete(`/repositories/${id}`, {
-    })
-
-    const repository = response.data;
-
-    const repositoryIndex = repositories.findIndex(repository => repository.id === id);
-    repositories.splice(repositoryIndex, 1);
-
-    setRepository([...repositories, repository])
-
-
+    setRepositories(repositories.filter(repository => repository.id !== id))
 
   }
 
